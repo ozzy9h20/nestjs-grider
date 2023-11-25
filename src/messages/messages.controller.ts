@@ -11,27 +11,21 @@ import { MessagesService } from './messages.service'
 
 @Controller('messages')
 export class MessagesController {
-  messageService: MessagesService
-
-  constructor() {
-    // DONT DO THIS ON REAL APPS
-    // USE DEPENDENCY INJECTION
-    this.messageService = new MessagesService()
-  }
+  constructor(public messagesService: MessagesService) {}
 
   @Get()
   listMessages() {
-    return this.messageService.findAll()
+    return this.messagesService.findAll()
   }
 
   @Post()
   createMessage(@Body() body: CreateMessageDto) {
-    return this.messageService.create(body.content)
+    return this.messagesService.create(body.content)
   }
 
   @Get('/:id')
   async getMessage(@Param('id') id: string) {
-    const message = await this.messageService.findOne(id)
+    const message = await this.messagesService.findOne(id)
 
     if (!message) {
       throw new NotFoundException('message not found')
