@@ -39,3 +39,5 @@ yarn.lock
 
 # ENV
 .env
+.env.development
+.env.test
