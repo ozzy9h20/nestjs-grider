@@ -1,4 +1,5 @@
 import { Expose, Transform } from 'class-transformer'
+import { IsOptional } from 'class-validator'
 
 export class ReportDto {
   @Expose()
@@ -25,7 +26,11 @@ export class ReportDto {
   @Expose()
   mileage: number
 
-  @Transform(({ obj }) => obj.user.id)
+  @Expose()
+  approved: boolean
+
+  @Transform(({ obj }) => obj.user?.id)
+  @IsOptional()
   @Expose()
   userId: number
 }
