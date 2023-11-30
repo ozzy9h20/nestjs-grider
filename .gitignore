@@ -41,3 +41,6 @@ yarn.lock
 .env
 .env.development
 .env.test
+
+# ORMConfig
+ormconfig.js
