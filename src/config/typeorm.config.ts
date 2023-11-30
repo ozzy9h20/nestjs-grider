@@ -8,13 +8,25 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
   constructor(private configService: ConfigService) {}
 
   createTypeOrmOptions(): TypeOrmModuleOptions {
-    return {
+    const defaultOption = {
       type: 'sqlite',
       synchronize: false,
       database: this.configService.get<string>('TYPEORM_SQLITE_PATH'),
-      entities: [join(__dirname, '**', '*.entity.ts')],
-      migrations: ['src/migrations/*.ts}'],
+      migrations: [join(__dirname, '../migrations/*.js')],
       autoLoadEntities: true,
+    } as TypeOrmModuleOptions
+
+    if (process.env.NODE_ENV === 'development') {
+      return {
+        ...defaultOption,
+        entities: [join(__dirname, '..', '**', '*.entity.ts')],
+      }
+    } else if (process.env.NODE_ENV === 'test') {
+      return {
+        ...defaultOption,
+        entities: [join(__dirname, '..', '**', '*.entity.js')],
+        migrationsRun: true,
+      }
     }
   }
 }
