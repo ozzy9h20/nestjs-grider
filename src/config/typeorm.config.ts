@@ -27,6 +27,18 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
         entities: [join(__dirname, '..', '**', '*.entity.js')],
         migrationsRun: true,
       }
+    } else if (process.env.NODE_ENV === 'production') {
+      return {
+        type: 'postgres',
+        url: this.configService.get<string>('DATABASE_URL'),
+        entities: [join(__dirname, '..', '**', '*.entity.js')],
+        autoLoadEntities: true,
+        migrations: [join(__dirname, '../migrations/*.js')],
+        migrationsRun: true,
+        ssl: {
+          rejectUnauthorized: false,
+        },
+      }
     }
   }
 }
